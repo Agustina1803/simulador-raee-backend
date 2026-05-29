@@ -4,9 +4,9 @@
   "description": "Backend para el simulador de la materia de Programación 2026",
   "main": "server.js",
   "scripts": {
-  "start": "node index.js",
-  "dev": "nodemon index.js"
-},
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "keywords": [],
   "author": "Agustina Bulacio, Juan Pablo Gerez",
   "license": "ISC",
