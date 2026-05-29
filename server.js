@@ -17,7 +17,7 @@ if (!mongoUri) {
     connectTimeoutMS: 10000,
     dbName: "test",
   })
-  .then(() => console.log("✅ Conectado a MongoDB Atlas"))
+  .then(() => console.log("✅ Conectado a MongoDB Atlas - DB: test"))
   .catch(err => {
     mongoConnectionError = err.message;
     console.error("❌ Error de conexión a MongoDB:", err.message);
