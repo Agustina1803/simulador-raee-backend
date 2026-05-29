@@ -21,4 +21,4 @@ const simulacionSchema = new mongoose.Schema({
   esAleatoria: Boolean
 }, { timestamps: true });
 
-export default mongoose.model("Simulacion", simulacionSchema);
+export default mongoose.model("Simulacion", simulacionSchema, "simulasions");

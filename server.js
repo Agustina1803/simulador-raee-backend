@@ -15,6 +15,7 @@ if (!mongoUri) {
   mongoose.connect(mongoUri, {
     serverSelectionTimeoutMS: 10000,
     connectTimeoutMS: 10000,
+    dbName: "test",
   })
   .then(() => console.log("✅ Conectado a MongoDB Atlas"))
   .catch(err => {
