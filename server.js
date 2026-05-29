@@ -7,6 +7,8 @@ import router from "./routes/index.routes.js";
 dotenv.config();
 
 const mongoUri = process.env.MONGO_URI_SIMULADOR;
+let mongoConnectionError = null;
+
 if (!mongoUri) {
   console.error("❌ No se encontró MONGO_URI_SIMULADOR. Agrega esa variable de entorno en Vercel o en .env.");
 } else {
@@ -15,7 +17,10 @@ if (!mongoUri) {
     connectTimeoutMS: 10000,
   })
   .then(() => console.log("✅ Conectado a MongoDB Atlas"))
-  .catch(err => console.error("❌ Error de conexión a MongoDB:", err.message));
+  .catch(err => {
+    mongoConnectionError = err.message;
+    console.error("❌ Error de conexión a MongoDB:", err.message);
+  });
 }
 
 const app = express();
@@ -23,6 +28,15 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.get("/api/debug", (req, res) => {
+  res.json({
+    hasMongoUriEnv: Boolean(process.env.MONGO_URI_SIMULADOR),
+    mongooseReadyState: mongoose.connection.readyState,
+    mongooseStateText: ["disconnected", "connected", "connecting", "disconnecting"][mongoose.connection.readyState] || "unknown",
+    mongoConnectionError,
+  });
+});
 
 app.use("/api", (req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
