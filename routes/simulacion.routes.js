@@ -4,6 +4,12 @@ import Simulacion from "../models/simulacion.js";
 
 const router = express.Router();
 
+router.get("/", (req, res) => {
+  res.json({
+    message: "Ruta válida. Usa POST /api/simulacion para ejecutar la simulación y GET /api/simulacion/historial para ver el historial.",
+  });
+});
+
 router.post("/", async (req, res) => {
   try {
     const { teclados, mouses, meses, aleatoria } = req.body;
