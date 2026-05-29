@@ -10,10 +10,7 @@ const mongoUri = process.env.MONGO_URI_SIMULADOR;
 if (!mongoUri) {
   console.error("❌ No se encontró MONGO_URI_SIMULADOR. Agrega esa variable de entorno en Vercel o en .env.");
 } else {
-  mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  mongoose.connect(mongoUri)
   .then(() => console.log("✅ Conectado a MongoDB Atlas"))
   .catch(err => console.error("❌ Error de conexión a MongoDB:", err.message));
 }
