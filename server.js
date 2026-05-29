@@ -6,16 +6,17 @@ import router from "./routes/index.routes.js";
 
 dotenv.config();
 
-if (!process.env.MONGO_URI_SIMULADOR) {
-  console.error("❌ MONGO_URI no está definido. Agrega la variable de entorno en Vercel o en .env.");
+const mongoUri = process.env.MONGO_URI_SIMULADOR;
+if (!mongoUri) {
+  console.error("❌ No se encontró MONGO_URI_SIMULADOR. Agrega esa variable de entorno en Vercel o en .env.");
+} else {
+  mongoose.connect(mongoUri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("✅ Conectado a MongoDB Atlas"))
+  .catch(err => console.error("❌ Error de conexión a MongoDB:", err.message));
 }
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log("✅ Conectado a MongoDB Atlas"))
-.catch(err => console.error("❌ Error de conexión a MongoDB:", err));
 
 const app = express();
 
