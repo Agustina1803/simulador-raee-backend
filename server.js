@@ -4,7 +4,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import "../database/config.js";
+import "./config/db.js";
 
 export default class Server {
   constructor() {
