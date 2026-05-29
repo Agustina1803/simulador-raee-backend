@@ -1,6 +1,6 @@
 import express from "express";
 import { ejecutarSimulacion } from "../controllers/simulacionController.js";
-import Simulacion from "../models/Simulacion.js";
+import simulacion from "../models/Simulacion.js";
 
 const router = express.Router();
 
