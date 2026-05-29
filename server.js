@@ -1,29 +1,28 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
+import mongoose from "mongoose";
+import router from "./routes/index.routes.js"; 
 
-import "./config/db.js";
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("✅ Conectado a MongoDB Atlas"))
+.catch(err => console.error("❌ Error de conexión a MongoDB:", err));
 
-export default class Server {
-  constructor() {
-    this.app = express();
-    this.port = process.env.PORT || 4000;
-    this.middlewares();
-  }
+const app = express();
 
-  middlewares() {
-    this.app.use(cors());
-    this.app.use(express.json());
 
-    const __filename = fileURLToPath(import.meta.url);
-    const __dirname = path.dirname(__filename);
-    this.app.use(express.static(path.join(__dirname, "../public")));
-  }
+app.use(cors());
+app.use(express.json());
 
-  listen() {
-    this.app.listen(this.port, () => {
-      console.info(`🚀 Servidor iniciado en http://localhost:${this.port}`);
-    });
-  }
-}
+
+app.use("/api", router);
+
+
+app.get("/", (req, res) => {
+  res.send("Servidor funcionando en Vercel 🚀");
+});
+
+
+export default app;
