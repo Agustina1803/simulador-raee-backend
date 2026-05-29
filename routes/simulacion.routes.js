@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
-     console.log("Body recibido:", req.body);
     const { teclados, mouses, meses, aleatoria } = req.body;
     const resultados = await ejecutarSimulacion(teclados, mouses, meses, aleatoria);
     res.json(resultados);
@@ -16,8 +15,12 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/historial", async (req, res) => {
-  const historial = await Simulacion.find().sort({ createdAt: -1 });;
-  res.json(historial);
+  try {
+    const historial = await Simulacion.find().sort({ createdAt: -1 });
+    res.json(historial);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 export default router;

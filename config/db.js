@@ -1,11 +1,16 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-export const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ Conectado a MongoDB Atlas");
-  } catch (error) {
-    console.error("❌ Error al conectar:", error.message);
-    process.exit(1);
-  }
-};
+dotenv.config();
+
+const uri = process.env.MONGO_URI;
+
+if (!uri) {
+  throw new Error("La variable MONGO_URI no está definida en el archivo .env");
+}
+
+mongoose.connect(uri)
+  .then(() => console.info("✅ Conectado a MongoDB Atlas"))
+  .catch((error) => console.error("❌ Error al conectar a MongoDB:", error.message));
+
+export default mongoose;

@@ -1,15 +1,14 @@
 {
   "name": "backendsimulador2026",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend para el simulador de la materia de Programación 2026",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+},
   "keywords": [],
-  "author": "",
+  "author": "Agustina Bulacio, Juan Pablo Gerez",
   "license": "ISC",
   "type": "module",
   "dependencies": {

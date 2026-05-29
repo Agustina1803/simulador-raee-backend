@@ -1,28 +1,31 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";   
-import dotenv from "dotenv";
-import dns from "dns";
-import simulacionRoutes from "./routes/simulacion.js";
+import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 
-dotenv.config();
+import "../database/config.js";
 
+export default class Server {
+  constructor() {
+    this.app = express();
+    this.port = process.env.PORT || 4000;
+    this.middlewares();
+  }
 
-dns.setServers(["8.8.8.8", "1.1.1.1"]);
+  middlewares() {
+    this.app.use(cors());
+    this.app.use(morgan("dev"));
+    this.app.use(express.json());
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    this.app.use(express.static(path.join(__dirname, "../public")));
+  }
 
-console.log("Mongo URI:", process.env.MONGO_URI);
-
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ Conectado a MongoDB Atlas"))
-  .catch(err => console.error("❌ Error al conectar:", err));
-
-app.use("/api/simulacion", simulacionRoutes);
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+  listen() {
+    this.app.listen(this.port, () => {
+      console.info(`🚀 Servidor iniciado en http://localhost:${this.port}`);
+    });
+  }
+}
