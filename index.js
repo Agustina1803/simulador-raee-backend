@@ -1,6 +1,6 @@
-import Server from "./server/config.js";
-import router from "./routes/index.routes.js";
+import app from "./server.js";
 
-const server = new Server();
-server.app.use("/api", router);
-server.listen();
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor iniciado en http://localhost:${PORT}`);
+});
