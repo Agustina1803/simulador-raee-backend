@@ -1,5 +1,5 @@
 import { congruencialMixto } from "../utils/random.js";
-import Simulacion from "../models/Simulacion.js";
+import Simulacion from "../models/simulacion.js";
 
 export async function ejecutarSimulacion(CT, CM, meses, aleatoria = false) {
   const rand = congruencialMixto(Date.now());
