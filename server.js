@@ -40,7 +40,7 @@ export default class Server {
     this.app.use(express.static(path.join(__dirname, "../public")));
 
     this.app.get("/", (req, res) => {
-      res.send("Backend Estudio Jurídico funcionando");
+      res.send("Backend simulador funcionando");
     });
   }
 
