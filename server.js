@@ -38,10 +38,12 @@ export default class Server {
       "https://simuladorraee2026.netlify.app" 
     ];
 
-   this.app.use(cors({
+this.app.use(cors({
   origin: "https://simuladorraee2026.netlify.app",
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS"]
 }));
+this.app.options("*", cors());
 
    
     this.app.use(morgan("dev"));
