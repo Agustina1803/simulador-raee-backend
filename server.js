@@ -4,6 +4,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
+import simulacionRouter from "./routes/simulacion.routes.js";
 
 export default class Server {
   constructor() {
@@ -37,13 +38,10 @@ export default class Server {
       "https://simuladorraee2026.netlify.app" 
     ];
 
-    this.app.use(
-      cors({
-        origin: allowedOrigins,
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        credentials: true,
-      })
-    );
+   this.app.use(cors({
+  origin: "https://simuladorraee2026.netlify.app",
+  credentials: true
+}));
 
    
     this.app.use(morgan("dev"));
