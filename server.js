@@ -1,59 +1,52 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import router from "./routes/index.routes.js";
+import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
+import connectDB from "./config/db.js";
 
-dotenv.config();
+export default class Server {
+  constructor() {
+    this.app = express();
+    this.port = process.env.PORT || 3000;
+    this.middlewares();
+  }
 
-const mongoUri = process.env.MONGO_URI_SIMULADOR;
-let mongoConnectionError = null;
+  middlewares() {
+    this.app.use(async (req, res, next) => {
+      try {
+        await connectDB();
+        next();
+      } catch (error) {
+        console.error("Error connecting to DB:", error);
+        res.status(500).json({ message: "Database connection error" });
+      }
+    });
 
-if (!mongoUri) {
-  console.error("❌ No se encontró MONGO_URI_SIMULADOR. Agrega esa variable de entorno en Vercel o en .env.");
-} else {
-  mongoose.connect(mongoUri, {
-    serverSelectionTimeoutMS: 10000,
-    connectTimeoutMS: 10000,
-    dbName: "test",
-  })
-  .then(() => console.log("✅ Conectado a MongoDB Atlas - DB: test"))
-  .catch(err => {
-    mongoConnectionError = err.message;
-    console.error("❌ Error de conexión a MongoDB:", err.message);
-  });
-}
+    this.app.use(
+      cors({
+        origin: true,
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        credentials: true,
+      })
+    );
+    this.app.use(morgan("dev"));
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    console.log(__filename);
+    console.log(__dirname);
+    this.app.use(express.static(path.join(__dirname, "../public")));
 
-const app = express();
-
-
-app.use(cors());
-app.use(express.json());
-
-app.get("/api/debug", (req, res) => {
-  res.json({
-    hasMongoUriEnv: Boolean(process.env.MONGO_URI_SIMULADOR),
-    mongooseReadyState: mongoose.connection.readyState,
-    mongooseStateText: ["disconnected", "connected", "connecting", "disconnecting"][mongoose.connection.readyState] || "unknown",
-    mongoConnectionError,
-  });
-});
-
-app.use("/api", (req, res, next) => {
-  if (mongoose.connection.readyState !== 1) {
-    return res.status(500).json({
-      error: "Aún no hay conexión a la base de datos. Revisa MONGO_URI_SIMULADOR en Vercel.",
+    this.app.get("/", (req, res) => {
+      res.send("Backend Estudio Jurídico funcionando");
     });
   }
-  next();
-});
 
-app.use("/api", router);
-
-
-app.get("/", (req, res) => {
-  res.send("Servidor funcionando en Vercel 🚀");
-});
-
-
-export default app;
+  listen() {
+    this.app.listen(this.port, () => {
+      console.info(`server inciiado: http://127.0.0.1:${this.port}`);
+    });
+  }
+}
